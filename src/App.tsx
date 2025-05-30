@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, Menu, BrainCog, Code2, Blocks, Cpu } from 'lucide-react';
 import ArticleView from './components/ArticleView';
 import NewsletterForm from './components/NewsletterForm';
@@ -13,6 +13,9 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const articlesSectionRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -53,17 +56,31 @@ function App() {
 
   const handleCategoryClick = (slug: string) => {
     setSelectedCategory(selectedCategory === slug ? undefined : slug);
+    setTimeout(() => {
+      articlesSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  // Função para fechar menu mobile ao buscar
+  const handleMobileSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setMobileMenuOpen(false);
+      setTimeout(() => {
+        articlesSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-16">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-white shadow-sm fixed top-0 left-0 w-full z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
               <span className="text-2xl font-bold text-blue-600">Modo Relax</span>
             </div>
+            {/* Desktop categorias */}
             <div className="hidden md:flex items-center space-x-8">
               {categories.map((category) => (
                 <button
@@ -80,23 +97,88 @@ function App() {
                 </button>
               ))}
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
+            {/* Desktop search */}
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="relative w-64">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  ref={searchInputRef}
                   type="text"
                   placeholder="Buscar artigos..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
                 />
+                {searchQuery && (
+                  <button
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    onClick={() => { setSearchQuery(''); searchInputRef.current?.focus(); }}
+                    tabIndex={-1}
+                  >
+                    ×
+                  </button>
+                )}
               </div>
-              <button className="md:hidden p-2 text-gray-600 hover:text-blue-600">
+            </div>
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center">
+              <button className="p-2 text-gray-600 hover:text-blue-600" onClick={() => setMobileMenuOpen(true)}>
                 <Menu className="w-6 h-6" />
               </button>
             </div>
           </div>
         </div>
+        {/* Mobile Drawer */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex">
+            <div className="bg-white w-4/5 max-w-xs h-full p-6 flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-2xl font-bold text-blue-600">Modo Relax</span>
+                <button onClick={() => setMobileMenuOpen(false)} className="text-gray-600 hover:text-blue-600 text-2xl">×</button>
+              </div>
+              <div className="mb-6">
+                <div className="relative w-full">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="Buscar artigos..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
+                    onKeyDown={handleMobileSearchKeyDown}
+                  />
+                  {searchQuery && (
+                    <button
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      onClick={() => { setSearchQuery(''); searchInputRef.current?.focus(); }}
+                      tabIndex={-1}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-3">
+                {categories.map((category) => (
+                  <button
+                    key={category.slug}
+                    onClick={() => { handleCategoryClick(category.slug); setMobileMenuOpen(false); }}
+                    className={`flex items-center space-x-2 px-4 py-3 rounded-full shadow-sm transition-all duration-200 font-medium border border-transparent focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2
+                      ${selectedCategory === category.slug
+                        ? 'bg-[var(--relax-primary-dark)] text-white shadow-md'
+                        : 'bg-[var(--relax-bg-light)] text-[var(--relax-text)] hover:bg-[var(--relax-primary)] hover:text-white'}
+                    `}
+                  >
+                    {category.icon}
+                    <span>{category.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1" onClick={() => setMobileMenuOpen(false)}></div>
+          </div>
+        )}
       </nav>
 
       {showArticle && selectedArticle ? (
@@ -130,7 +212,7 @@ function App() {
           </div>
 
           {/* Articles Section */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div ref={articlesSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-bold">
                 {selectedCategory
