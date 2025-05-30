@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .bg-relax-hero {
+    @apply bg-teal-100;
+  }
+}
+
+:root {
+  --relax-primary: #38b2ac; /* teal-400 */
+  --relax-primary-dark: #319795; /* teal-500 */
+  --relax-bg: #e6f6f5;
+  --relax-bg-light: #f6fffe;
+  --relax-text: #234e52;
+}
+
+body {
+  background-color: var(--relax-bg);
+  color: var(--relax-text);
+}
+
+a {
+  color: var(--relax-primary);
+}
+a:hover {
+  color: var(--relax-primary-dark);
+}
+
+button, .btn, [type="submit"] {
+  background-color: var(--relax-primary);
+  color: #fff;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+button:hover, .btn:hover, [type="submit"]:hover {
+  background-color: var(--relax-primary-dark);
+}
+
+.bg-white {
+  background-color: var(--relax-bg-light) !important;
+}
+
+.text-blue-600, .text-blue-700, .text-blue-500 {
+  color: var(--relax-primary) !important;
+}
+
+.bg-blue-600, .bg-blue-700, .bg-blue-500 {
+  background-color: var(--relax-primary) !important;
+}
+
+.border-blue-600, .border-blue-500 {
+  border-color: var(--relax-primary) !important;
+}

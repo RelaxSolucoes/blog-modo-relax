@@ -32,7 +32,7 @@ export default function NewsletterForm() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder="Entre com seu e-mail"
           className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           required
         />
@@ -49,7 +49,7 @@ export default function NewsletterForm() {
         {status === 'loading' ? (
           <Loader2 className="w-5 h-5 animate-spin" />
         ) : (
-          'Subscribe'
+          'Se Inscrever'
         )}
       </button>
 

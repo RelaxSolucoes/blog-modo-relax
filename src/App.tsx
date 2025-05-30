@@ -38,10 +38,10 @@ function App() {
   };
 
   const categories = [
-    { name: 'Development', icon: <Code2 className="w-6 h-6" />, slug: 'development' },
-    { name: 'AI', icon: <BrainCog className="w-6 h-6" />, slug: 'ai' },
-    { name: 'No-Code', icon: <Blocks className="w-6 h-6" />, slug: 'no-code' },
-    { name: 'Low-Code', icon: <Cpu className="w-6 h-6" />, slug: 'low-code' },
+    { name: 'Finanças Descomplicadas', icon: <Code2 className="w-6 h-6" />, slug: 'financas-descomplicadas' },
+    { name: 'Vida Saudável', icon: <BrainCog className="w-6 h-6" />, slug: 'vida-saudavel' },
+    { name: 'Tech que Ajuda', icon: <Blocks className="w-6 h-6" />, slug: 'tech-que-ajuda' },
+    { name: 'Estilo de Vida', icon: <Cpu className="w-6 h-6" />, slug: 'estilo-de-vida' },
   ];
 
   const footerLinks = {
@@ -66,18 +66,18 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <span className="text-2xl font-bold text-blue-600">TechInsights</span>
+              <span className="text-2xl font-bold text-blue-600">Modo Relax</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               {categories.map((category) => (
                 <button
                   key={category.slug}
                   onClick={() => handleCategoryClick(category.slug)}
-                  className={`flex items-center space-x-1 ${
-                    selectedCategory === category.slug
-                      ? 'text-blue-600'
-                      : 'text-gray-700 hover:text-blue-600'
-                  }`}
+                  className={`flex items-center space-x-1 px-4 py-2 rounded-full shadow-sm transition-all duration-200 font-medium border border-transparent focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2
+                    ${selectedCategory === category.slug
+                      ? 'bg-[var(--relax-primary-dark)] text-white shadow-md'
+                      : 'bg-[var(--relax-bg-light)] text-[var(--relax-text)] hover:bg-[var(--relax-primary)] hover:text-white'}
+                  `}
                 >
                   {category.icon}
                   <span>{category.name}</span>
@@ -89,7 +89,7 @@ function App() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search articles..."
+                  placeholder="Buscar artigos..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -108,22 +108,25 @@ function App() {
       ) : (
         <>
           {/* Hero Section */}
-          <div className="relative bg-blue-600 text-white overflow-hidden">
+          <div className="relative bg-relax-hero text-white overflow-hidden">
             <div className="absolute inset-0">
               <img
-                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c"
-                alt="Technology Background"
-                className="w-full h-full object-cover opacity-20"
+                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+                alt="Relaxamento Natureza"
+                className="w-full h-full object-cover opacity-30"
               />
-              <div className="absolute inset-0 bg-blue-600 opacity-75"></div>
+              <div className="absolute inset-0 bg-teal-400 opacity-60"></div>
             </div>
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
               <div className="max-w-3xl">
                 <h1 className="text-4xl font-bold mb-6">
-                  Exploring the Future of Technology
+                  Coloque sua Vida em Modo Relax
                 </h1>
-                <p className="text-xl mb-8">
-                  Your source for the latest insights on Development, AI, No-Code, and Low-Code solutions.
+                <p className="text-xl mb-4">
+                  Dicas práticas de finanças, saúde e tecnologia para viver com mais leveza, equilíbrio e liberdade.
+                </p>
+                <p className="mb-8">
+                  Assine a newsletter e comece agora sua jornada rumo a uma vida mais tranquila.
                 </p>
                 <NewsletterForm />
               </div>
@@ -135,15 +138,15 @@ function App() {
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-bold">
                 {selectedCategory
-                  ? `${categories.find(c => c.slug === selectedCategory)?.name} Articles`
-                  : 'All Articles'}
+                  ? `${categories.find(c => c.slug === selectedCategory)?.name} Artigos`
+                  : 'Todos os Artigos'}
               </h2>
               {selectedCategory && (
                 <button
                   onClick={() => setSelectedCategory(undefined)}
-                  className="text-blue-600 hover:text-blue-700"
+                  className="px-5 py-2 rounded-full bg-[var(--relax-primary)] text-white font-medium shadow-sm transition-all duration-200 hover:bg-[var(--relax-primary-dark)] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
                 >
-                  View All Articles
+                  Ver todos os artigos
                 </button>
               )}
             </div>
@@ -203,9 +206,9 @@ function App() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {/* Brand and Social */}
             <div className="col-span-2 md:col-span-1">
-              <span className="text-2xl font-bold text-blue-600">TechInsights</span>
+              <span className="text-2xl font-bold text-blue-600">Modo Relax</span>
               <p className="mt-4 text-gray-600">
-                Bringing you the latest in technology and innovation.
+                Inspirando você a relaxar e viver melhor.
               </p>
               <div className="flex space-x-4 mt-6">
                 <a href="#" className="text-gray-400 hover:text-blue-600">
@@ -266,7 +269,7 @@ function App() {
 
           <div className="border-t mt-12 pt-8">
             <p className="text-center text-gray-500">
-              © {new Date().getFullYear()} TechInsights. All rights reserved.
+              © {new Date().getFullYear()} Modo Relax. Todos os direitos reservados.
             </p>
           </div>
         </div>
