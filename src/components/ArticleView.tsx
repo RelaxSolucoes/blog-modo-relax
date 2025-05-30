@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Calendar, User, Clock, Share2, ThumbsUp, Loader2, Check } from 'lucide-react';
 import { type Article, toggleArticleLike } from '../lib/supabase';
 
@@ -12,9 +12,19 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
   const [hasLiked, setHasLiked] = useState(article.user_has_liked || false);
   const [likesCount, setLikesCount] = useState(article.likes_count);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Cleanup function to cancel speech when component unmounts or article changes
+    return () => {
+      if (utteranceRef.current) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      }
+    };
   }, [article]);
 
   // Função para calcular o tempo de leitura
@@ -32,6 +42,37 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
     
     // Retorna pelo menos 1 minuto
     return Math.max(1, readingTime);
+  };
+
+  // Função para iniciar ou parar a leitura
+  const toggleSpeech = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Desculpe, seu navegador não suporta Text-to-Speech.');
+      return;
+    }
+
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      const textToSpeak = `${article.title}. Por ${article.author?.name}. Publicado em ${new Date(article.published_at || '').toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}. Tempo de leitura estimado: ${calculateReadingTime(article.content)} minutos. ${article.content?.replace(/<[^>]*>/g, '') || ''}`;
+
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = 'pt-BR'; // Set language to Portuguese
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setIsSpeaking(false);
+      };
+
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+    }
   };
 
   const handleLike = async () => {
@@ -121,6 +162,14 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
             <span>{calculateReadingTime(article.content)} min de leitura</span>
           </div>
         </div>
+
+        {/* TTS Button */}
+        <button
+          onClick={toggleSpeech}
+          className="mt-4 px-5 py-2 rounded-full bg-blue-500 text-white font-medium shadow-sm transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          {isSpeaking ? 'Parar Leitura' : 'Ouvir Artigo'}
+        </button>
       </div>
 
       {/* Featured Image */}
