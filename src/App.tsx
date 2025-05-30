@@ -253,10 +253,13 @@ function App() {
                       <p className="text-gray-600 mb-4">{article.excerpt}</p>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-500">
-                          {new Date(article.published_at || '').toLocaleDateString('pt-BR', {
+                          {new Date(article.published_at || '').toLocaleString('pt-BR', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'America/Sao_Paulo'
                           })}
                         </span>
                         <span className="text-blue-600 font-semibold hover:text-blue-700">

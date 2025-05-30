@@ -107,10 +107,13 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
           </div>
           <div className="flex items-center">
             <Calendar className="w-4 h-4 mr-2" />
-            <span>{new Date(article.published_at || '').toLocaleDateString('pt-BR', {
+            <span>{new Date(article.published_at || '').toLocaleString('pt-BR', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              timeZone: 'America/Sao_Paulo'
             })}</span>
           </div>
           <div className="flex items-center">
