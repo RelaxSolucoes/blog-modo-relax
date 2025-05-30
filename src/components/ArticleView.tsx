@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Calendar, User, Clock, Share2, ThumbsUp, Loader2, Check } from 'lucide-react';
 import { type Article, toggleArticleLike } from '../lib/supabase';
 
@@ -12,6 +12,10 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
   const [hasLiked, setHasLiked] = useState(article.user_has_liked || false);
   const [likesCount, setLikesCount] = useState(article.likes_count);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [article]);
 
   const handleLike = async () => {
     try {
