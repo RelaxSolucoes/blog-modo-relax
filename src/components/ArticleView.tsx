@@ -57,10 +57,10 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
       {/* Back Button */}
       <button
         onClick={onBack}
-        className="flex items-center text-blue-600 hover:text-blue-700 mb-8"
+        className="flex items-center gap-2 px-5 py-2 mb-8 rounded-full bg-[var(--relax-primary)] text-white font-medium shadow-sm transition-all duration-200 hover:bg-[var(--relax-primary-dark)] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2"
       >
         <ArrowLeft className="w-5 h-5 mr-2" />
-        Back to Articles
+        Voltar para artigos
       </button>
 
       {/* Article Header */}
@@ -78,7 +78,7 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
           </div>
           <div className="flex items-center">
             <Calendar className="w-4 h-4 mr-2" />
-            <span>{new Date(article.published_at || '').toLocaleDateString('en-US', {
+            <span>{new Date(article.published_at || '').toLocaleDateString('pt-BR', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
@@ -86,7 +86,7 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
           </div>
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2" />
-            <span>8 min read</span>
+            <span>8 min de leitura</span>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
             ) : (
               <ThumbsUp className={`w-5 h-5 ${hasLiked ? 'fill-current' : ''}`} />
             )}
-            <span>{likesCount} Likes</span>
+            <span>{likesCount} Curtidas</span>
           </button>
           <div className="relative">
             <button 
@@ -132,12 +132,12 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
               onClick={handleShare}
             >
               <Share2 className="w-5 h-5" />
-              <span>Share</span>
+              <span>Compartilhar</span>
             </button>
             {showCopiedMessage && (
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-sm rounded-lg flex items-center">
                 <Check className="w-4 h-4 mr-1" />
-                Copied to clipboard!
+                Link copiado!
               </div>
             )}
           </div>

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Menu, BrainCog, Code2, Blocks, Cpu, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Menu, BrainCog, Code2, Blocks, Cpu } from 'lucide-react';
 import ArticleView from './components/ArticleView';
 import NewsletterForm from './components/NewsletterForm';
 import { getArticles, type Article } from './lib/supabase';
+import footerBg from './footer-bg.png';
 
 function App() {
   const [showArticle, setShowArticle] = useState(false);
@@ -44,11 +45,6 @@ function App() {
     { name: 'Estilo de Vida', icon: <Cpu className="w-6 h-6" />, slug: 'estilo-de-vida' },
   ];
 
-  const footerLinks = {
-    about: ['About Us', 'Careers', 'Contact Us', 'Press Kit'],
-    resources: ['Blog', 'Newsletter', 'Events', 'Help Center'],
-    legal: ['Terms', 'Privacy', 'Cookies', 'Licenses'],
-  };
 
   const handleArticleClick = (article: Article) => {
     setSelectedArticle(article);
@@ -175,14 +171,14 @@ function App() {
                       <p className="text-gray-600 mb-4">{article.excerpt}</p>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-500">
-                          {new Date(article.published_at || '').toLocaleDateString('en-US', {
+                          {new Date(article.published_at || '').toLocaleDateString('pt-BR', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric',
                           })}
                         </span>
                         <span className="text-blue-600 font-semibold hover:text-blue-700">
-                          Read More →
+                          Ler mais →
                         </span>
                       </div>
                     </div>
@@ -192,7 +188,7 @@ function App() {
             ) : (
               <div className="text-center py-12">
                 <p className="text-gray-600 text-lg">
-                  No articles found. Try adjusting your search or filters.
+                  Nenhum artigo encontrado. Tente ajustar sua busca ou filtros.
                 </p>
               </div>
             )}
@@ -200,78 +196,31 @@ function App() {
         </>
       )}
 
-      {/* Footer */}
-      <footer className="bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {/* Brand and Social */}
-            <div className="col-span-2 md:col-span-1">
-              <span className="text-2xl font-bold text-blue-600">Modo Relax</span>
-              <p className="mt-4 text-gray-600">
-                Inspirando você a relaxar e viver melhor.
-              </p>
-              <div className="flex space-x-4 mt-6">
-                <a href="#" className="text-gray-400 hover:text-blue-600">
-                  <Facebook className="w-6 h-6" />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-blue-600">
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-blue-600">
-                  <Instagram className="w-6 h-6" />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-blue-600">
-                  <Youtube className="w-6 h-6" />
-                </a>
-              </div>
-            </div>
+      {/* Pré-footer com imagem de fundo */}
+      <div
+        className="relative overflow-hidden min-h-[320px] flex flex-col items-center justify-center"
+        style={{
+          backgroundImage: `url(${footerBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay translúcido mais forte */}
+        <div className="absolute inset-0 bg-white opacity-70 pointer-events-none" style={{zIndex:1}}></div>
+        <div className="relative z-10 flex flex-col items-center justify-center w-full py-16">
+          <span className="text-4xl md:text-5xl font-extrabold text-gray-900 drop-shadow-lg" style={{textShadow: '2px 2px 10px #fff, 2px 2px 10px #000a'}}>Modo Relax</span>
+          <p className="mt-4 text-lg md:text-2xl text-gray-800 text-center font-medium drop-shadow-lg" style={{textShadow: '2px 2px 10px #fff, 2px 2px 10px #000a'}}>Inspirando você a relaxar e viver melhor.</p>
+          {/* Se desejar, adicione aqui os ícones de redes sociais realmente utilizados */}
+        </div>
+      </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-gray-900 font-semibold mb-4">About</h3>
-              <ul className="space-y-2">
-                {footerLinks.about.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-600 hover:text-blue-600">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-gray-900 font-semibold mb-4">Resources</h3>
-              <ul className="space-y-2">
-                {footerLinks.resources.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-600 hover:text-blue-600">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-gray-900 font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                {footerLinks.legal.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-600 hover:text-blue-600">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t mt-12 pt-8">
-            <p className="text-center text-gray-500">
-              © {new Date().getFullYear()} Modo Relax. Todos os direitos reservados.
-            </p>
-          </div>
+      {/* Rodapé final com fundo sólido */}
+      <footer className="bg-white border-t w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col items-center justify-center">
+          <p className="text-center text-gray-500">
+            © {new Date().getFullYear()} Modo Relax. Todos os direitos reservados.
+          </p>
         </div>
       </footer>
     </div>

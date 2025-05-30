@@ -57,13 +57,13 @@ export default function NewsletterForm() {
       {status === 'success' && (
         <div className="absolute mt-2 flex items-center text-green-600">
           <CheckCircle className="w-5 h-5 mr-2" />
-          <span>Successfully subscribed!</span>
+          <span>Inscrição realizada com sucesso!</span>
         </div>
       )}
       {status === 'error' && (
         <div className="absolute mt-2 flex items-center text-red-600">
           <XCircle className="w-5 h-5 mr-2" />
-          <span>{errorMessage}</span>
+          <span>{errorMessage || 'Falha ao se inscrever. Tente novamente.'}</span>
         </div>
       )}
     </form>
