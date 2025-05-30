@@ -17,6 +17,23 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [article]);
 
+  // Função para calcular o tempo de leitura
+  const calculateReadingTime = (content: string | null): number => {
+    if (!content) return 0;
+    
+    // Remove HTML tags
+    const textContent = content.replace(/<[^>]*>/g, '');
+    
+    // Conta palavras (considerando espaços e pontuação)
+    const wordCount = textContent.trim().split(/\s+/).length;
+    
+    // Média de leitura: 200 palavras por minuto
+    const readingTime = Math.ceil(wordCount / 200);
+    
+    // Retorna pelo menos 1 minuto
+    return Math.max(1, readingTime);
+  };
+
   const handleLike = async () => {
     try {
       setIsLiking(true);
@@ -77,7 +94,15 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
         {/* Article Meta */}
         <div className="flex flex-wrap items-center text-gray-600 gap-4">
           <div className="flex items-center">
-            <User className="w-4 h-4 mr-2" />
+            {article.author?.avatar_url ? (
+              <img
+                src={article.author.avatar_url}
+                alt={article.author.name}
+                className="w-6 h-6 rounded-full mr-2 object-cover"
+              />
+            ) : (
+              <User className="w-4 h-4 mr-2" />
+            )}
             <span>{article.author?.name}</span>
           </div>
           <div className="flex items-center">
@@ -90,7 +115,7 @@ export default function ArticleView({ article, onBack }: ArticleViewProps) {
           </div>
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2" />
-            <span>8 min de leitura</span>
+            <span>{calculateReadingTime(article.content)} min de leitura</span>
           </div>
         </div>
       </div>
